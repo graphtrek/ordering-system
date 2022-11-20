@@ -14,23 +14,23 @@ public class Money {
     }
 
     public boolean isGreaterThanZero() {
-        return this.amount != null && this.amount.compareTo(BigDecimal.ZERO) > 0;
+        return amount != null && amount.compareTo(BigDecimal.ZERO) > 0;
     }
 
     public boolean isGreaterThan(Money money) {
-        return this.amount != null && this.amount.compareTo(money.getAmount()) > 0;
+        return amount != null && amount.compareTo(money.getAmount()) > 0;
     }
 
     public Money add(Money money) {
-        return new Money(setScale(this.amount.add(money.getAmount())));
+        return new Money(setScale(amount.add(money.getAmount())));
     }
 
     public Money subtract(Money money) {
-        return new Money(setScale(this.amount.subtract(money.getAmount())));
+        return new Money(setScale(amount.subtract(money.getAmount())));
     }
 
     public Money multiply(int multiplier) {
-        return new Money(setScale(this.amount.multiply(new BigDecimal(multiplier))));
+        return new Money(setScale(amount.multiply(new BigDecimal(multiplier))));
     }
 
     public BigDecimal getAmount() {

@@ -2,10 +2,13 @@ package co.grtk.ordering.system.order.service.domain.entity;
 
 import co.grtk.ordering.system.domain.entity.AggregateRoot;
 import co.grtk.ordering.system.domain.valueobject.*;
+import co.grtk.ordering.system.order.service.domain.exception.OrderDomainException;
+import co.grtk.ordering.system.order.service.domain.valueobject.OrderItemId;
 import co.grtk.ordering.system.order.service.domain.valueobject.StreetAddress;
 import co.grtk.ordering.system.order.service.domain.valueobject.TrackingId;
 
 import java.util.List;
+import java.util.UUID;
 
 /*
     Do not use Lombok in core
@@ -40,6 +43,52 @@ public class Order extends AggregateRoot<OrderId> {
         trackingId = builder.trackingId;
         orderStatus = builder.orderStatus;
         failureMessages = builder.failureMessages;
+    }
+
+    public void validateOrder() {
+        validateInitialOrder();
+        validateTotalPrice();
+        validateItemsPrice();
+    }
+
+    private void validateItemsPrice() {
+        items.stream().map(orderItem -> {
+            validateItemPrice(orderItem);
+            return orderItem.getSubTotal();
+        }).reduce(Money.ZERO, Money::add);
+    }
+
+    private void validateItemPrice(OrderItem orderItem) {
+        if (!orderItem.isPriceValid())
+            throw new OrderDomainException(
+                    "Order item price " +
+                            orderItem.getPrice().getAmount() +
+                            " is not valid for product price " +
+                            orderItem.getProduct().getPrice().getAmount());
+    }
+
+    private void validateTotalPrice() {
+        if (price != null && !price.isGreaterThanZero())
+            throw new OrderDomainException("Price must be grater than zero!");
+    }
+
+    private void validateInitialOrder() {
+        if (getId() != null && orderStatus != null)
+            throw new OrderDomainException("Order is not in correct state for initialization!");
+    }
+
+    public void initializeOrder() {
+        super.setId(new OrderId(UUID.randomUUID()));
+        trackingId = new TrackingId(UUID.randomUUID());
+        orderStatus = OrderStatus.PENDING;
+        initilaizeOrderItems();
+    }
+
+    private void initilaizeOrderItems() {
+        long itemId = 1;
+        for (OrderItem orderItem : items) {
+            orderItem.initializeOrderItem(super.getId(), new OrderItemId(itemId++));
+        }
     }
 
     public static Builder builder() {

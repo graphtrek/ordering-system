@@ -32,6 +32,37 @@ public class OrderItem extends BaseEntity<OrderItemId> {
         subTotal = builder.subTotal;
     }
 
+    protected void initializeOrderItem(OrderId orderId, OrderItemId orderItemId) {
+        this.orderId = orderId;
+        super.setId(orderItemId);
+    }
+
+    public OrderId getOrderId() {
+        return orderId;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Money getPrice() {
+        return price;
+    }
+
+    public Money getSubTotal() {
+        return subTotal;
+    }
+
+    protected boolean isPriceValid() {
+        return price.isGreaterThan(Money.ZERO) &&
+                price.equals(product.getPrice()) &&
+                price.equals(subTotal.multiply(quantity));
+    }
+
     public static Builder builder() {
         return new Builder();
     }
