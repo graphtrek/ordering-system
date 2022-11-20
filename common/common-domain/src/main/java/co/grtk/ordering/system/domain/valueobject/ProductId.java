@@ -1,6 +1,8 @@
 package co.grtk.ordering.system.domain.valueobject;
 
-public class ProductId<UUID> extends BaseId<UUID> {
+import java.util.UUID;
+
+public class ProductId extends BaseId<UUID> {
 
     public ProductId(UUID id) {
         super(id);

@@ -1,40 +1,59 @@
 package co.grtk.ordering.system.domain.valueobject;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Objects;
 
-@RequiredArgsConstructor
-@Getter
-@EqualsAndHashCode
 public class Money {
     private final BigDecimal amount;
 
-    public boolean isGraterThanZero() {
-        return amount != null && amount.compareTo(BigDecimal.ZERO) > 0;
+    public static final Money ZERO = new Money(BigDecimal.ZERO);
+
+    public Money(BigDecimal amount) {
+        this.amount = amount;
     }
 
-    public boolean isGraterThan(@NonNull Money money) {
-        return amount != null && amount.compareTo(money.getAmount()) > 0;
+    public boolean isGreaterThanZero() {
+        return this.amount != null && this.amount.compareTo(BigDecimal.ZERO) > 0;
     }
 
-    public Money add(@NonNull Money money) {
-        return new Money(setScale(amount.add(money.getAmount())));
+    public boolean isGreaterThan(Money money) {
+        return this.amount != null && this.amount.compareTo(money.getAmount()) > 0;
     }
 
-    public Money subtract(@NonNull Money money) {
-        return new Money(setScale(amount.subtract(money.getAmount())));
+    public Money add(Money money) {
+        return new Money(setScale(this.amount.add(money.getAmount())));
+    }
+
+    public Money subtract(Money money) {
+        return new Money(setScale(this.amount.subtract(money.getAmount())));
     }
 
     public Money multiply(int multiplier) {
-        return new Money(setScale(amount.multiply(new BigDecimal(multiplier))));
+        return new Money(setScale(this.amount.multiply(new BigDecimal(multiplier))));
     }
 
-    private BigDecimal setScale(@NonNull BigDecimal input) {
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Money money = (Money) o;
+        return Objects.equals(amount, money.amount);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount);
+    }
+
+    private BigDecimal setScale(BigDecimal input) {
+        // with scale 2, the number of digits after decimal point is 2, e.g. 10.75 or 500.94
+        // HALF_EVEN statistically minimise the cumulative error, because rounds toward to nearest neighbor.
         return input.setScale(2, RoundingMode.HALF_EVEN);
     }
+
 }
