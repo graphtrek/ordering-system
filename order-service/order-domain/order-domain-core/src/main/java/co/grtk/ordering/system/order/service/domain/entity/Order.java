@@ -51,16 +51,52 @@ public class Order extends AggregateRoot<OrderId> {
         validateItemsPrice();
     }
 
-    private void validateItemsPrice() {
-       Money itemsTotalPrice = items.stream().map(orderItem -> {
+    public void pay() {
+        if (orderStatus != OrderStatus.PENDING)
+            throw new OrderDomainException("Order not in correct state for pay operation");
+        orderStatus = OrderStatus.PAID;
+    }
+
+    public void approve() {
+        if (orderStatus != OrderStatus.PAID)
+            throw new OrderDomainException("Order not in correct state for approve operation!");
+        orderStatus = OrderStatus.APPROVED;
+    }
+
+    public void initCancel(List<String> failureMessages) {
+        if (orderStatus != OrderStatus.PAID)
+            throw new OrderDomainException("Order not in correct state for initCncelL operation!");
+        orderStatus = OrderStatus.CANCELLING;
+        updateFailureMessages(failureMessages);
+    }
+
+    public void cancel(List<String> failureMessages) {
+        if (!(orderStatus == OrderStatus.PAID || orderStatus == OrderStatus.CANCELLING))
+            throw new OrderDomainException("Order not in the correct state for cancel operation!");
+        orderStatus = OrderStatus.CANCELLED;
+        updateFailureMessages(failureMessages);
+    }
+
+    private void updateFailureMessages(List<String> failureMessages) {
+        if (this.failureMessages != null && failureMessages != null) {
+            this.failureMessages.addAll(
+                    failureMessages.stream().filter(failureMessage -> !failureMessage.isEmpty()).toList());
+        }
+
+        if (this.failureMessages == null)
+            this.failureMessages = failureMessages;
+    }
+
+    void validateItemsPrice() {
+        Money itemsTotalPrice = items.stream().map(orderItem -> {
             validateItemPrice(orderItem);
             return orderItem.getSubTotal();
         }).reduce(Money.ZERO, Money::add);
 
-       if(itemsTotalPrice.equals(price))
-           throw new OrderDomainException(
-                   "Order price " + price.getAmount() +
-                           " is not equals with items price " + itemsTotalPrice);
+        if (!itemsTotalPrice.equals(price))
+            throw new OrderDomainException(
+                    "Order price " + price.getAmount() +
+                            " is not equals with items price " + itemsTotalPrice);
     }
 
     private void validateItemPrice(OrderItem orderItem) {
