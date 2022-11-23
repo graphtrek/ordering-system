@@ -15,13 +15,18 @@ import co.grtk.ordering.system.domain.valueobject.ProductId;
     Entity objects identified only by id and nothing else
  */
 public class Product extends BaseEntity<ProductId> {
-    private final Money price;
-    private final String name;
+    private Money price;
+    private String name;
 
     public Product(ProductId productId, Money price, String name) {
         super.setId(productId);
         this.price = price;
         this.name = name;
+    }
+
+    public void updateWithConfirmedNameAndPrice(String name, Money price) {
+        this.name = name;
+        this.price = price;
     }
 
     public Money getPrice() {

@@ -109,12 +109,12 @@ public class Order extends AggregateRoot<OrderId> {
     }
 
     private void validateTotalPrice() {
-        if (price != null && !price.isGreaterThanZero())
+        if(price == null || !price.isGreaterThanZero())
             throw new OrderDomainException("Price must be grater than zero!");
     }
 
     private void validateInitialOrder() {
-        if (getId() != null && orderStatus != null)
+        if(orderStatus != null || getId() != null)
             throw new OrderDomainException("Order is not in correct state for initialization!");
     }
 
