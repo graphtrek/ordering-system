@@ -1,6 +1,6 @@
 package co.grtk.ordering.system.order.service.domain.event;
 
-import event.DomainEvent;
+import co.grtk.ordering.system.domain.event.DomainEvent;
 import co.grtk.ordering.system.order.service.domain.entity.Order;
 
 import java.time.ZonedDateTime;
