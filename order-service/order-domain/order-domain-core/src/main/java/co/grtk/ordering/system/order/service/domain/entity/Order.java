@@ -25,7 +25,7 @@ public class Order extends AggregateRoot<OrderId> {
     private final BuyerId buyerId;
     private final SellerId sellerId;
     private final List<OrderItem> items;
-    private final StreetAddress streetAddress;
+    private final StreetAddress deliveryAddress;
     private final Money price;
 
     // fields sets by business logic after created the entity
@@ -38,7 +38,7 @@ public class Order extends AggregateRoot<OrderId> {
         buyerId = builder.buyerId;
         sellerId = builder.sellerId;
         items = builder.items;
-        streetAddress = builder.streetAddress;
+        deliveryAddress = builder.deliveryAddress;
         price = builder.price;
         trackingId = builder.trackingId;
         orderStatus = builder.orderStatus;
@@ -148,8 +148,8 @@ public class Order extends AggregateRoot<OrderId> {
         return items;
     }
 
-    public StreetAddress getStreetAddress() {
-        return streetAddress;
+    public StreetAddress getDeliveryAddress() {
+        return deliveryAddress;
     }
 
     public Money getPrice() {
@@ -174,7 +174,7 @@ public class Order extends AggregateRoot<OrderId> {
         private BuyerId buyerId;
         private SellerId sellerId;
         private List<OrderItem> items;
-        private StreetAddress streetAddress;
+        private StreetAddress deliveryAddress;
         private Money price;
         private TrackingId trackingId;
         private OrderStatus orderStatus;
@@ -203,8 +203,8 @@ public class Order extends AggregateRoot<OrderId> {
             return this;
         }
 
-        public Builder streetAddress(StreetAddress val) {
-            streetAddress = val;
+        public Builder deliveryAddress(StreetAddress val) {
+            deliveryAddress = val;
             return this;
         }
 

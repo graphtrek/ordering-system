@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class SellerId extends BaseId<UUID> {
 
-    SellerId(UUID id) {
+    public SellerId(UUID id) {
         super(id);
     }
 }

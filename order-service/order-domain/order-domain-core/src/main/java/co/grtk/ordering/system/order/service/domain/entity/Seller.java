@@ -35,7 +35,7 @@ public class Seller extends AggregateRoot<SellerId> {
         private Builder() {
         }
 
-        public Builder id(SellerId val) {
+        public Builder sellerId(SellerId val) {
             sellerId = val;
             return this;
         }

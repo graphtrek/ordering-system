@@ -1,6 +1,6 @@
 package co.grtk.ordering.system.order.service.dto.create;
 
-import co.grtk.ordering.system.order.service.domain.entity.OrderItem;
+
 import co.grtk.ordering.system.order.service.domain.valueobject.StreetAddress;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
