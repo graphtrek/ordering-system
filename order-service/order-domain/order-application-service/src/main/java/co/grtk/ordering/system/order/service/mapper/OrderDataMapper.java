@@ -9,7 +9,6 @@ import co.grtk.ordering.system.order.service.domain.entity.OrderItem;
 import co.grtk.ordering.system.order.service.domain.entity.Product;
 import co.grtk.ordering.system.order.service.domain.entity.Seller;
 import co.grtk.ordering.system.order.service.domain.valueobject.StreetAddress;
-import co.grtk.ordering.system.order.service.domain.valueobject.TrackingId;
 import co.grtk.ordering.system.order.service.dto.create.CreateOrderCommand;
 import co.grtk.ordering.system.order.service.dto.create.CreateOrderResponse;
 import org.springframework.stereotype.Component;
