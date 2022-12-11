@@ -11,6 +11,7 @@ import co.grtk.ordering.system.order.service.domain.entity.Seller;
 import co.grtk.ordering.system.order.service.domain.valueobject.StreetAddress;
 import co.grtk.ordering.system.order.service.dto.create.CreateOrderCommand;
 import co.grtk.ordering.system.order.service.dto.create.CreateOrderResponse;
+import co.grtk.ordering.system.order.service.dto.track.TrackOrderResponse;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -26,6 +27,14 @@ public class OrderDataMapper {
                 .products(createOrderCommand.getOrderItems().stream().map(orderItem ->
                                 new Product(new ProductId(orderItem.getProductId())))
                         .collect(Collectors.toList()))
+                .build();
+    }
+
+    public TrackOrderResponse orderToTrackOrderResponse(Order order) {
+        return TrackOrderResponse.builder()
+                .orderTrackingId(order.getTrackingId().getValue())
+                .orderStatus(order.getOrderStatus())
+                .failureMessages(order.getFailureMessages())
                 .build();
     }
 
