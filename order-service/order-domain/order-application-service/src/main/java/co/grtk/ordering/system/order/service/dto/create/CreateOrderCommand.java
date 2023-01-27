@@ -1,12 +1,11 @@
 package co.grtk.ordering.system.order.service.dto.create;
 
 
-import co.grtk.ordering.system.order.service.domain.valueobject.StreetAddress;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -20,9 +19,9 @@ public class CreateOrderCommand {
     @NotNull
     private final UUID buyerId;
     @NotNull
-    private final List<OrderItem> orderItems;
+    private final List<OrderItem> items;
     @NotNull
-    private final StreetAddress address;
+    private final OrderAddress address;
     @NotNull
     private final BigDecimal price;
 }

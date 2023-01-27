@@ -11,6 +11,7 @@ import co.grtk.ordering.system.order.service.domain.entity.Seller;
 import co.grtk.ordering.system.order.service.domain.valueobject.StreetAddress;
 import co.grtk.ordering.system.order.service.dto.create.CreateOrderCommand;
 import co.grtk.ordering.system.order.service.dto.create.CreateOrderResponse;
+import co.grtk.ordering.system.order.service.dto.create.OrderAddress;
 import co.grtk.ordering.system.order.service.dto.track.TrackOrderResponse;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +25,7 @@ public class OrderDataMapper {
     public Seller createOrderCommandToSeller(CreateOrderCommand createOrderCommand) {
         return Seller.builder()
                 .sellerId(new SellerId(createOrderCommand.getSellerId()))
-                .products(createOrderCommand.getOrderItems().stream().map(orderItem ->
+                .products(createOrderCommand.getItems().stream().map(orderItem ->
                                 new Product(new ProductId(orderItem.getProductId())))
                         .collect(Collectors.toList()))
                 .build();
@@ -38,10 +39,11 @@ public class OrderDataMapper {
                 .build();
     }
 
-    public CreateOrderResponse orderToCreateOrderResponse(Order order) {
+    public CreateOrderResponse orderToCreateOrderResponse(Order order, String message) {
         return CreateOrderResponse.builder()
                 .orderStatus(order.getOrderStatus())
                 .orderTrackingId(order.getTrackingId().getValue())
+                .message(message)
                 .build();
     }
 
@@ -50,8 +52,8 @@ public class OrderDataMapper {
                 .buyerId(new BuyerId(createOrderCommand.getBuyerId()))
                 .price(new Money(createOrderCommand.getPrice()))
                 .sellerId(new SellerId(createOrderCommand.getSellerId()))
-                .deliveryAddress(orderAddressToDeliveyAddress(createOrderCommand.getAddress()))
-                .items(orderItemsToOrderItemsEntities(createOrderCommand.getOrderItems()))
+                .deliveryAddress(orderAddressToStreetAddress(createOrderCommand.getAddress()))
+                .items(orderItemsToOrderItemsEntities(createOrderCommand.getItems()))
                 .build();
     }
 
@@ -66,11 +68,11 @@ public class OrderDataMapper {
         ).collect(Collectors.toList());
     }
 
-    private StreetAddress orderAddressToDeliveyAddress(StreetAddress address) {
+    private StreetAddress orderAddressToStreetAddress(OrderAddress orderAddress) {
         return new StreetAddress(
                 UUID.randomUUID(),
-                address.getStreet(),
-                address.getPostalCode(),
-                address.getCity());
-    }
-}
+                orderAddress.getStreet(),
+                orderAddress.getPostalCode(),
+                orderAddress.getCity()
+        );
+    }}

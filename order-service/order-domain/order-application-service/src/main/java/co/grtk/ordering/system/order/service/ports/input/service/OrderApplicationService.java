@@ -5,7 +5,7 @@ import co.grtk.ordering.system.order.service.dto.create.CreateOrderResponse;
 import co.grtk.ordering.system.order.service.dto.track.TrackOrderQuery;
 import co.grtk.ordering.system.order.service.dto.track.TrackOrderResponse;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 public interface OrderApplicationService {
 
